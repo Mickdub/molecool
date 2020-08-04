@@ -12,7 +12,26 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 def calculate_distance(rA, rB):
-    # This function calculates the distance between two points given as numpy arrays.
+    """
+    Calculate the distance between points.
+
+    Parameters
+    ----------
+    rA, rB: np.ndarray
+        The coordinates of each point.
+
+    Returns
+    -------
+    dist : float
+        The distance between two points.
+
+    Examples
+    --------
+    >>> r1 = np.array([0,0,0])
+    >>> r2 = np.array([0,0.1,0])
+    >>> calculate_distance(r1, r2)
+    0.1
+    """
     d=(rA-rB)
     dist=np.linalg.norm(d)
     return dist
@@ -21,14 +40,17 @@ def open_pdb(f_loc):
     # This function reads in a pdb file and returns the atom names and coordinates.
     with open(f_loc) as f:
         data = f.readlines()
-    c = []
+
+    coordinates = []
     sym = []
-    for l in data:
-        if 'ATOM' in l[0:6] or 'HETATM' in l[0:6]:
-            sym.append(l[76:79].strip())
-            c2 = [float(x) for x in l[30:55].split()]
-            c.append(c2)
-    coords = np.array(c)
+    for line in data:
+        if 'ATOM' in line[0:6] or 'HETATM' in line[0:6]:
+            sym.append(line[76:79].strip())
+            c2 = [float(x) for x in line[30:55].split()]
+            coordinates.append(c2)
+    
+    coords = np.array(coordinates)
+    
     return sym, coords
 
 atomic_weights = {
